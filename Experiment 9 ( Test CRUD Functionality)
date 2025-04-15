@@ -1,0 +1,31 @@
+package com.example;
+
+public class TestStudentCRUD {
+
+    public static void main(String[] args) {
+
+        // Create a StudentDAO object to perform CRUD operations
+        StudentDAO studentDAO = new StudentDAO();
+
+        // Create new students
+        studentDAO.createStudent(1, "John Doe", 22);
+        studentDAO.createStudent(2, "Jane Smith", 21);
+
+        // Read a student by ID
+        Student student = studentDAO.getStudent(1);
+        System.out.println("Read student: " + student);
+
+        // Update a student's details
+        studentDAO.updateStudent(1, "John Updated", 23);
+        student = studentDAO.getStudent(1);
+        System.out.println("Updated student: " + student);
+
+        // Delete a student by ID
+        studentDAO.deleteStudent(2);
+        System.out.println("Student with ID 2 has been deleted.");
+
+        // Try to read the deleted student
+        student = studentDAO.getStudent(2);
+        System.out.println("Read student with ID 2: " + student);  // Should be null
+    }
+}
