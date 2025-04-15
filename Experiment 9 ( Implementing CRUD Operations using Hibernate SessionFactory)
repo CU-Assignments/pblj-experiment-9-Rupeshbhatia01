@@ -1,0 +1,81 @@
+package com.example;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
+
+public class StudentDAO {
+
+    private SessionFactory factory;
+
+    public StudentDAO() {
+        // Create the SessionFactory from hibernate.cfg.xml
+        factory = new Configuration().configure("hibernate.cfg.xml")
+                .addAnnotatedClass(Student.class).buildSessionFactory();
+    }
+
+    // Create a new student
+    public void createStudent(int id, String name, int age) {
+        Session session = factory.getCurrentSession();
+        try {
+            // Create a new Student object
+            Student student = new Student(id, name, age);
+            // Start a transaction
+            session.beginTransaction();
+            // Save the student object
+            session.save(student);
+            // Commit the transaction
+            session.getTransaction().commit();
+        } finally {
+            factory.close();
+        }
+    }
+
+    // Read a student by ID
+    public Student getStudent(int id) {
+        Session session = factory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            // Retrieve the student based on the ID
+            Student student = session.get(Student.class, id);
+            session.getTransaction().commit();
+            return student;
+        } finally {
+            factory.close();
+        }
+    }
+
+    // Update an existing student
+    public void updateStudent(int id, String name, int age) {
+        Session session = factory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            // Get the student by ID
+            Student student = session.get(Student.class, id);
+            // Update the student's details
+            student.setName(name);
+            student.setAge(age);
+            session.getTransaction().commit();
+        } finally {
+            factory.close();
+        }
+    }
+
+    // Delete a student by ID
+    public void deleteStudent(int id) {
+        Session session = factory.getCurrentSession();
+        try {
+            session.beginTransaction();
+            // Get the student by ID
+            Student student = session.get(Student.class, id);
+            // Delete the student
+            if (student != null) {
+                session.delete(student);
+            }
+            session.getTransaction().commit();
+        } finally {
+            factory.close();
+        }
+    }
+}
